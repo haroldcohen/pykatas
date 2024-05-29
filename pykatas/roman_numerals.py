@@ -1,60 +1,41 @@
 class RomanNumeralsConverter:
 
+    _LOOKUP = {
+        1: "I",
+        5: "V",
+        10: "X",
+        50: "L",
+        100: "C",
+        500: "D",
+        1000: "M",
+    }
+
     def convert(self, number: int) -> str:
-        return ("M" * int(number / 1000)
-                + self._convert_hundreds(number=number % 1000)
-                + self._convert_tens(number=number % 100)
-                + self._convert_units(number=number % 10))
-
-    def _convert_units(self, number: int) -> str:
-        if number >= 5:
-            return self._to_upper_half(
-                number=number,
-                numeration=1,
-                next_numeration=10,
-                numeration_symbol="I",
-                next_numeration_symbol="X",
-                half_symbol="V",
-            )
-        return self._to_lower_half(
-            number=number,
-            numeration=1,
-            numeration_symbol="I",
-            half_symbol="V",
+        return (
+            "M" * int(number / 1000)
+            + self._convert(numeration=100, number=number % 1000)
+            + self._convert(numeration=10, number=number % 100)
+            + self._convert(numeration=1, number=number % 10)
         )
 
-    def _convert_tens(self, number: int) -> str:
-        if number >= 50:
+    def _convert(self, numeration: int, number: int):
+        numeration_symbol = RomanNumeralsConverter._LOOKUP[numeration]
+        half_symbol = RomanNumeralsConverter._LOOKUP[numeration * 5]
+        if number >= numeration * 5:
+            next_numeration = numeration * 10
             return self._to_upper_half(
                 number=number,
-                numeration=10,
-                next_numeration=100,
-                numeration_symbol="X",
-                next_numeration_symbol="C",
-                half_symbol="L",
+                numeration=numeration,
+                next_numeration=next_numeration,
+                numeration_symbol=numeration_symbol,
+                next_numeration_symbol=RomanNumeralsConverter._LOOKUP[next_numeration],
+                half_symbol=half_symbol,
             )
         return self._to_lower_half(
             number=number,
-            numeration=10,
-            numeration_symbol="X",
-            half_symbol="L",
-        )
-
-    def _convert_hundreds(self, number: int) -> str:
-        if number >= 500:
-            return self._to_upper_half(
-                number=number,
-                numeration=100,
-                next_numeration=1000,
-                numeration_symbol="C",
-                next_numeration_symbol="M",
-                half_symbol="D",
-            )
-        return self._to_lower_half(
-            number=number,
-            numeration=100,
-            numeration_symbol="C",
-            half_symbol="D",
+            numeration=numeration,
+            numeration_symbol=numeration_symbol,
+            half_symbol=half_symbol,
         )
 
     def _to_lower_half(
@@ -69,13 +50,13 @@ class RomanNumeralsConverter:
         return numeration_symbol * int(number / numeration)
 
     def _to_upper_half(
-            self,
-            number: int,
-            numeration: int,
-            next_numeration: int,
-            numeration_symbol: str,
-            next_numeration_symbol: str,
-            half_symbol: str,
+        self,
+        number: int,
+        numeration: int,
+        next_numeration: int,
+        numeration_symbol: str,
+        next_numeration_symbol: str,
+        half_symbol: str,
     ) -> str:
         if number >= next_numeration - numeration:
             return numeration_symbol + next_numeration_symbol
