@@ -10,12 +10,15 @@ class RomanNumeralsConverter:
         1000: "M",
     }
 
-    def convert(self, number: int) -> str:
+    def __init__(self, number: int):
+        self._number = number
+
+    def convert(self) -> str:
         return (
-            "M" * int(number / 1000)
-            + self._convert(numeration=100, number=number % 1000)
-            + self._convert(numeration=10, number=number % 100)
-            + self._convert(numeration=1, number=number % 10)
+            "M" * int(self._number / 1000)
+            + self._convert(numeration=100, number=self._number % 1000)
+            + self._convert(numeration=10, number=self._number % 100)
+            + self._convert(numeration=1, number=self._number % 10)
         )
 
     def _convert(self, numeration: int, number: int):

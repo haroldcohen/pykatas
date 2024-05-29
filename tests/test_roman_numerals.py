@@ -44,13 +44,13 @@ from pykatas.roman_numerals import RomanNumeralsConverter
         (410, "CDX"),
         (900, "CM"),
         (910, "CMX"),
-    ]
+    ],
 )
 def test_convert_a_number_should_return_a_matching_roman_numeral(
     number,
     expected_result,
 ):
-    converter = RomanNumeralsConverter()
-    result = converter.convert(number=number)
+    converter = RomanNumeralsConverter(number=number)
+    result = converter.convert()
 
     assert result == expected_result
