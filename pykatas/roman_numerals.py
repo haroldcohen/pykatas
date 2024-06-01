@@ -24,14 +24,12 @@ class RomanNumeralsConverter:
     def _convert(self, numeration: int):
         self._number %= numeration * 10
         numeration_symbol = RomanNumeralsConverter._LOOKUP[numeration]
-        half_symbol = RomanNumeralsConverter._LOOKUP[numeration * 5]
-        if self._number >= numeration * 5:
-            next_numeration = numeration * 10
+        half_numeration = numeration * 5
+        half_symbol = RomanNumeralsConverter._LOOKUP[half_numeration]
+        if self._number >= half_numeration:
             return self._to_upper_half(
                 numeration=numeration,
-                next_numeration=next_numeration,
                 numeration_symbol=numeration_symbol,
-                next_numeration_symbol=RomanNumeralsConverter._LOOKUP[next_numeration],
                 half_symbol=half_symbol,
             )
         return self._to_lower_half(
@@ -43,11 +41,11 @@ class RomanNumeralsConverter:
     def _to_upper_half(
         self,
         numeration: int,
-        next_numeration: int,
         numeration_symbol: str,
-        next_numeration_symbol: str,
         half_symbol: str,
     ) -> str:
+        next_numeration = numeration * 10
+        next_numeration_symbol = RomanNumeralsConverter._LOOKUP[next_numeration]
         if self._number >= next_numeration - numeration:
             return numeration_symbol + next_numeration_symbol
         remainder = self._number - next_numeration / 2
